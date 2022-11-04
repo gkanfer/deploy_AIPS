@@ -18,6 +18,76 @@ from skimage import io, filters, measure, color, img_as_ubyte
 from skimage.draw import disk
 from skimage import measure, restoration,morphology
 
+import seaborn as sns
+
+from utils import AIPS_granularity as ag
+from utils import AIPS_file_display as afd
+from utils import AIPS_cellpose as AC
+
+def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None):
+    '''
+    function description:
+        1) cell segmented using cellpose
+        2) clean data based on cell area detected
+        3) granularity measure
+    output:
+        1) Segmented image composition with area label
+        2) Area histogram plot
+        3) Segmented image composition after removal of small objects
+        4) plot of Mean intensity over opening operation (granularity spectrum)
+    :parameter
+    clean: int, remove object bellow the selected area size
+    classLabel: int, assign label
+    file: str
+    path: str
+    outPath: str
+
+
+    Note: required single channel tif
+    '''
+    AIPS_pose_object = AC.AIPS_cellpose(Image_name=file, path=path, model_type="cyto", channels=[0, 0])
+    img = AIPS_pose_object.cellpose_image_load()
+    mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img)
+    compsite = afd.Compsite_display(input_image=img, mask_roi=mask)
+    compsiteImage  = compsite.display_image_label(table=table, font_select="arial.ttf", font_size=24,  intensity=2,label_draw = 'area')
+    compsiteImage.save(os.path.join(outPath,"merge.png"), "PNG")
+    if clean:
+        objectidx = table.loc[table['area'] < clean,:].index.tolist()
+        mask, table = AIPS_pose_object.removeObjects(objectList=objectidx)
+        compsite = afd.Compsite_display(input_image=img, mask_roi=mask).draw_ROI_contour(channel=None)
+        compsiteImage = compsite.draw_ROI_contour(channel=None).display_image_label(table=table,
+                                                                                    font_select="arial.ttf",
+                                                                                    font_size=24, contour=True,
+                                                                                    intensity=2, label_draw = 'area')
+        compsiteImage.save(os.path.join(outPath,"mergeClean.png"), "PNG")
+    gran = ag.GRANULARITY(image=img, mask=mask)
+    granData = gran.loopLabelimage(start_kernel=2, end_karnel=7, kernel_size=7)
+    granOriginal, _ = gran.featuresTable(features=['label', 'centroid'])
+    granData["classLabel"] = classLabel
+    granData.to_csv(os.path.join(outPath,'granularity.csv'))
+    Intensity, Kernel = ag.MERGE().meanIntensity(granData, group=classLabel)
+    df = pd.DataFrame({"kernel":Kernel,"Signal intensity (ratio)":Intensity})
+    from matplotlib.backends.backend_pdf import PdfPages
+    def generate_plots():
+        def hist():
+            fig, ax = plt.subplots()
+            sns.histplot(data=table, x='area', kde=True, color=sns.color_palette("Set2")[1], binwidth=500).set(title = 'Cell area distribution')
+            return ax
+        def line():
+            fig, ax = plt.subplots()
+            sns.lineplot(data=df, x="kernel", y="Signal intensity (ratio)").set(title='Granularity spectrum plot')
+            return ax
+        plot1 = hist()
+        plot2 = line()
+        return (plot1, plot2)
+
+    def plots2pdf(plots, fname):
+        with PdfPages(fname) as pp:
+            for plot in plots:
+                pp.savefig(plot.figure)
+    plots2pdf(generate_plots(), os.path.join(outPath,'outPlots.pdf'))
+
+
 
 class AIPS_cellpose:
     def __init__(self, Image_name=None, path=None, image = None, mask = None, table = None, model_type = None, channels = None ):

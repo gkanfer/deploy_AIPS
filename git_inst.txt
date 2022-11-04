@@ -1,8 +1,14 @@
 git init
-git add README.md
+git add -A
 git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/gkanfer/deploy_AIPS.git
 git push -u origin main
 
 
+
+git add -A
+git commit -m "cell_pose granularity function and terminal"
+git push origin
+
+cell_pose granularity function and terminal

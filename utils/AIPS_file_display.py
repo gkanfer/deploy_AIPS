@@ -17,10 +17,11 @@ from utils.display_and_xml import evaluate_image_output,test_image
 
 
 class Compsite_display(object):
-    def __init__(self,input_image, mask_roi, rgb_out = None):
+    def __init__(self,input_image, mask_roi,channel = None):
         self.input_image = input_image
         self.mask_roi = mask_roi
-        self.rgb_out = rgb_out
+        self.channel = channel
+        self.rgb_out = self.draw_ROI_contour(self.channel)
 
     def outline_seg(mask,index):
         '''
@@ -88,8 +89,7 @@ class Compsite_display(object):
                 rgb_input_img[bin_mask > 0, channel] = 255
             else:
                 rgb_input_img[bin_mask > 0, 2] = 255
-        self.rgb_out = rgb_input_img
-        return self.rgb_out
+        return rgb_input_img
 
     def measure_properties(self):
         prop_names = [
@@ -116,7 +116,7 @@ class Compsite_display(object):
         )
         return table_prop
 
-    def display_image_label(self, table, font_select, font_size, contour, label_draw = None, intensity = 1):
+    def display_image_label(self, table, font_select, font_size, label_draw = None, intensity = 1):
         '''
         table: table of objects measure
         label_draw: 'table index' or feature selected from table (label)
@@ -126,12 +126,7 @@ class Compsite_display(object):
         return:
         PIL_image: 16 bit mask rgb of the labeled image
         '''
-        # count number of objects in nuc['sort_mask']
-        if contour is True:
-            PIL_image = Image.fromarray(self.rgb_out*intensity)
-        else:
-            PIL_image = Image.fromarray(np.uint16(self.mask_roi)).convert('RGB')
-        # Label ROI by centroid and index
+        PIL_image = Image.fromarray(self.rgb_out * intensity)
         if table is None:
             raise ValueError("Table is missing")
         if len(table) < 2:
@@ -147,8 +142,8 @@ class Compsite_display(object):
             # display label
             sel_lable =  info_table.index.values.tolist()
         else:
-            if label_draw in [col for col in info_table.column]:
-                sel_lable =  info_table.label_draw.values.tolist()
+            if label_draw in [col for col in info_table.columns]:
+                sel_lable =  info_table[label_draw].tolist()
             else:
                 raise ValueError("Feature is not selected")
         for i,label in enumerate(sel_lable):
