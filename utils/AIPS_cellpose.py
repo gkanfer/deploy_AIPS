@@ -24,7 +24,7 @@ from utils import AIPS_granularity as ag
 from utils import AIPS_file_display as afd
 from utils import AIPS_cellpose as AC
 
-def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None):
+def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None, outputTableName = None,):
     '''
     function description:
         1) cell segmented using cellpose
@@ -41,6 +41,7 @@ def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None):
     file: str
     path: str
     outPath: str
+    outputTableName: str, e.g. "outputTableNorm.csv"
 
 
     Note: required single channel tif
@@ -54,17 +55,17 @@ def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None):
     if clean:
         objectidx = table.loc[table['area'] < clean,:].index.tolist()
         mask, table = AIPS_pose_object.removeObjects(objectList=objectidx)
-        compsite = afd.Compsite_display(input_image=img, mask_roi=mask).draw_ROI_contour(channel=None)
-        compsiteImage = compsite.draw_ROI_contour(channel=None).display_image_label(table=table,
-                                                                                    font_select="arial.ttf",
-                                                                                    font_size=24, contour=True,
-                                                                                    intensity=2, label_draw = 'area')
+        compsite = afd.Compsite_display(input_image=img, mask_roi=mask)
+        compsiteImage = compsite.display_image_label(table=table, font_select="arial.ttf", font_size=24, intensity=2,label_draw='area')
         compsiteImage.save(os.path.join(outPath,"mergeClean.png"), "PNG")
     gran = ag.GRANULARITY(image=img, mask=mask)
     granData = gran.loopLabelimage(start_kernel=2, end_karnel=7, kernel_size=7)
     granOriginal, _ = gran.featuresTable(features=['label', 'centroid'])
     granData["classLabel"] = classLabel
-    granData.to_csv(os.path.join(outPath,'granularity.csv'))
+    if outputTableName is None:
+        granData.to_csv(os.path.join(outPath,'granularity.csv'))
+    else:
+        granData.to_csv(os.path.join(outPath, outputTableName))
     Intensity, Kernel = ag.MERGE().meanIntensity(granData, group=classLabel)
     df = pd.DataFrame({"kernel":Kernel,"Signal intensity (ratio)":Intensity})
     from matplotlib.backends.backend_pdf import PdfPages

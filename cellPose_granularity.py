@@ -20,7 +20,7 @@ from utils.AIPS_cellpose import granularityMesure_cellpose
 
 if (__name__ == "__main__"):
     import argparse
-    parser = argparse.ArgumentParser(description='sbatch test')
+    parser = argparse.ArgumentParser(description='measure granularity from segmented images')
     parser.add_argument('--file', dest='file', type=str, required=True,
                         help="Image name")
     parser.add_argument('--path', dest='path', type=str, required=True,
@@ -31,9 +31,11 @@ if (__name__ == "__main__"):
                         help="phenotype label for classification, integer")
     parser.add_argument('--pathOut', dest='pathOut', type=str, required=True,
                         help="path to save images and plots")
+    parser.add_argument('--outputTableName', dest='outputTableName', type=str, required=True,
+                        help="Name of the table output e.g. outputTableNorm.csv")
     args = parser.parse_args()
 
-    granularityMesure_cellpose(file = args.file, path = args.path, clean = args.clean, classLabel = args.classLabel,outPath = args.pathOut)
+    granularityMesure_cellpose(file = args.file, path = args.path, clean = args.clean, classLabel = args.classLabel,outPath = args.pathOut, outputTableName = args.outputTableName)
 
 
 

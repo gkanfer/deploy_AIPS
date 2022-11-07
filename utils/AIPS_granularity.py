@@ -172,6 +172,16 @@ class GRANULARITY():
             stack_img = resize(stack_img, (resize_pixel, resize_pixel), anti_aliasing=False)
             return stack_img, mask_value
 
+    def GranularityMesureFly(self, start_kernel=2, end_karnel=80, kernel_size=20, fetureLabel=["label"]):
+        '''
+        On the fly mesure granularity by selcted size
+        :param start_kernel:
+        :param end_karnel:
+        :param kernel_size:
+        :param fetureLabel:
+        :return:
+        '''
+
 
 
 class MERGE:

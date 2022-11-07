@@ -6,9 +6,10 @@ git remote add origin https://github.com/gkanfer/deploy_AIPS.git
 git push -u origin main
 
 
-
 git add -A
 git commit -m "cell_pose granularity function and terminal"
 git push origin
 
-cell_pose granularity function and terminal
+git add -A
+git commit -m "Model training function complete"
+git push origin
