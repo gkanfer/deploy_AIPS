@@ -13,3 +13,7 @@ git push origin
 git add -A
 git commit -m "Model training function complete"
 git push origin
+
+git add -A
+git commit -m "Deploy function complete"
+git push origin

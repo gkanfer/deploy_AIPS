@@ -106,7 +106,7 @@ class GRANULARITY():
         imageOpen = morphology.dilation(eros_pix, footprint=selem)
         return imageOpen
 
-    def loopLabelimage(self,start_kernel = 2 , end_karnel = 80, kernel_size=20 , fetureLabel = ["label"]):
+    def loopLabelimage(self,start_kernel = 2 , end_karnel = 80, kernel_size=20 , fetureLabel = ["label"], deploy = False ):
         '''
         :param start_kernel: smallest kernel size
         :param end_karnel: largest kernel size
@@ -118,14 +118,19 @@ class GRANULARITY():
         '''
         # returns column wise table
         tableInit, tableColumn = self.featuresTable(features =fetureLabel)
-        open_vec = np.linspace(start_kernel, end_karnel, kernel_size, endpoint=False, dtype=int)
-        if len(open_vec) < 3:
+        open_vec = np.linspace(start_kernel, end_karnel, kernel_size, endpoint=True, dtype=int)
+        if deploy:
+            limit = 1
+            open_vec = [open_vec[0],open_vec[-1]]
+        else:
+            limit = 3
+        if len(open_vec) < limit:
             mesg = "increase kernel size"
             raise ValueError(mesg)
-        for i in range(open_vec[0],len(open_vec)-1):
-            openImage = self.openingOperation(kernel = open_vec[i])
+        for opning in open_vec:
+            openImage = self.openingOperation(kernel = opning)
             tableGran_temp = self.measure_properties(input_image =openImage,input_mask = self.mask ,prop_names = fetureLabel)
-            tableColumn[int(open_vec[i])] = tableGran_temp['mean_int'].tolist()
+            tableColumn[opning] = tableGran_temp['mean_int'].tolist()
         table_ = pd.DataFrame({'label':  tableInit.index.values})
         # convert pd to numpy preform normalisation by dividing
         kernel_array = [col for col in tableColumn.columns]
@@ -171,17 +176,6 @@ class GRANULARITY():
             stack_img = masked_image[x_start:x_end, y_start:y_end]
             stack_img = resize(stack_img, (resize_pixel, resize_pixel), anti_aliasing=False)
             return stack_img, mask_value
-
-    def GranularityMesureFly(self, start_kernel=2, end_karnel=80, kernel_size=20, fetureLabel=["label"]):
-        '''
-        On the fly mesure granularity by selcted size
-        :param start_kernel:
-        :param end_karnel:
-        :param kernel_size:
-        :param fetureLabel:
-        :return:
-        '''
-
 
 
 class MERGE:

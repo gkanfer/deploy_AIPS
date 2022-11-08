@@ -249,9 +249,9 @@ class AIPS_cellpose:
         :return: binary image of the called masks, table_sel
         '''
         table_na_rmv_trgt = table_sel_cor.loc[table_sel_cor['predict'] > threshold, :]
-        for z in range(len(table_na_rmv_trgt)):
+        for z in range(len(table_na_rmv_trgt)-1):
             x, y = table_na_rmv_trgt.loc[table_na_rmv_trgt.index[z],["centroid-0", "centroid-1"]]
-            row, col = disk((int(x), int(x)), 20)
+            row, col = disk((int(x), int(y)), 20)
             img_blank[row, col] = 1
         return img_blank, table_na_rmv_trgt
 

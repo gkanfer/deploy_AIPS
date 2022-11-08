@@ -153,4 +153,18 @@ class Compsite_display(object):
         contrast_enhanced_img = contrast.enhance(intensity)
         return contrast_enhanced_img
 
+    @staticmethod
+    def enhanceImage(rgb_input_img,intensity):
+        '''
+        :param rgb_input_img: 3 channel stack file 8bit image with a
+        :param intensity: brighter image
+        :return: pillow object image
+        '''
+        PIL_image = Image.fromarray(rgb_input_img * intensity)
+        contrast = ImageEnhance.Contrast(PIL_image)
+        contrast_enhanced_img = contrast.enhance(intensity)
+        return contrast_enhanced_img
+
+
+
 
