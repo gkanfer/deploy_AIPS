@@ -18,7 +18,7 @@ from utils import AIPS_file_display as afd
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-def BayesianGranularityDeploy(file,path,kernel_size,trace_a,trace_b,thold,pathOut):
+def BayesianGranularityDeploy(file,path,kernel_size,trace_a,trace_b,thold,pathOut,clean,saveMerge=False):
     '''
     on the fly cell call function for activating cells
 
@@ -29,9 +29,14 @@ def BayesianGranularityDeploy(file,path,kernel_size,trace_a,trace_b,thold,pathOu
     :param trace_b: int
     :param thold: int, probability threshold for calling cells
     :param pathOut: str
+    :param clean: int, remove object bellow the selected area size
+    :param saveMerge: boolean
     :return: binary mask for activating the called cell
     '''
-    AIPS_pose_object = AC.AIPS_cellpose(Image_name=file, path=path, model_type="cyto", channels=[0, 0])
+    if isinstance(clean, int) == False:
+        mesg = "area size is not of type integer"
+        raise ValueError(mesg)
+    AIPS_pose_object = AC.AIPS_cellpose(Image_name=file, path=path, model_type="cyto", channels=[0, 0], clean = clean)
     img = AIPS_pose_object.cellpose_image_load()
     # create mask for the entire image
     mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img)
@@ -48,6 +53,12 @@ def BayesianGranularityDeploy(file,path,kernel_size,trace_a,trace_b,thold,pathOu
     image_blank = np.zeros_like(img)
     binary, table_sel = AIPS_pose_object.call_bin(table_sel_cor=table, threshold=0.9, img_blank=image_blank)
     img_gs = img_as_ubyte(binary)
+    if saveMerge:
+        table['predict'] = np.round(table.predict.values, 2)
+        maskKeep = AIPS_pose_object.keepObject(table = table_sel)
+        compsiteImage = afd.Compsite_display(input_image=img, mask_roi=maskKeep)
+        LabeldImage = compsiteImage.display_image_label(table=table, font_select="arial.ttf", font_size=14,label_draw='predict', intensity=1)
+        LabeldImage.save(os.path.join(pathOut, id_generator() + '.png'))
     if os.path.exists(os.path.join(pathOut, 'binary.tif')):
         os.remove(os.path.join(pathOut, 'binary.tif'))
     tfi.imsave(os.path.join(pathOut, 'binary.tif'), img_gs)
@@ -58,7 +69,7 @@ def BayesianGranularityDeploy(file,path,kernel_size,trace_a,trace_b,thold,pathOu
         f.write(str(new_value))
 
 
-def BayesianGranularityDeployTest(file,path,kernel_size,trace_a,trace_b,thold,pathOut):
+def BayesianGranularityDeployTest(file,path,kernel_size,trace_a,trace_b,thold,pathOut, clean ):
     '''
     on the fly cell call function for activating cells
 
@@ -69,9 +80,13 @@ def BayesianGranularityDeployTest(file,path,kernel_size,trace_a,trace_b,thold,pa
     :param trace_b: int
     :param thold: int, probability threshold for calling cells
     :param pathOut: str
+    :param clean: int, remove object bellow the selected area size
     :return: binary mask for activating the called cell
     '''
-    AIPS_pose_object = AC.AIPS_cellpose(Image_name=file, path=path, model_type="cyto", channels=[0, 0])
+    if isinstance(clean, int) == False:
+        mesg = "area size is not of type integer"
+        raise ValueError(mesg)
+    AIPS_pose_object = AC.AIPS_cellpose(Image_name=file, path=path, model_type="cyto", channels=[0, 0], clean = clean)
     img = AIPS_pose_object.cellpose_image_load()
     # create mask for the entire image
     mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img)

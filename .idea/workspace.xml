@@ -2,25 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62151331-da0d-4129-bd18-7b2a95c8a8b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/deploy_AIPS.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Deploy.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BayesTraining/.ipynb_checkpoints/Deploy_bayesModel-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/BayesTraining/.ipynb_checkpoints/Deploy_bayesModel-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BayesTraining/.ipynb_checkpoints/seeborn histogram-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BayesTraining/Deploy_bayesModel.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/BayesTraining/Deploy_bayesModel.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BayesTraining/Model_training.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/BayesTraining/Model_training.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BayesTraining/seeborn histogram.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/draft.py" beforeDir="false" afterPath="$PROJECT_DIR$/draft.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BayesTraining/.ipynb_checkpoints/TraininOnNikonMicroscope-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/BayesTraining/.ipynb_checkpoints/TraininOnNikonMicroscope-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BayesTraining/TraininOnNikonMicroscope.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/BayesTraining/TraininOnNikonMicroscope.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy.bat" beforeDir="false" afterPath="$PROJECT_DIR$/deploy.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/git_inst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/git_inst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/AIPS_cellpose.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/AIPS_cellpose.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/AIPS_granularity.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/AIPS_granularity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/AIPS_file_display.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/AIPS_file_display.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/Baysian_deploy.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/Baysian_deploy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/Baysian_training.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/Baysian_training.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +40,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.run">
     <configuration name="draft" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="deploy_AIPS" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -72,8 +62,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="deploy_AIPS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run" />
         <item itemvalue="Python.draft" />
       </list>
     </recent_temporary>
@@ -109,19 +121,14 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/utils/AIPS_granularity.py</url>
-          <line>118</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/run.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/utils/AIPS_granularity.py</url>
-          <line>68</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/utils/AIPS_granularity.py</url>
-          <line>58</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/utils/Baysian_deploy.py</url>
+          <line>54</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

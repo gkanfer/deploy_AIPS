@@ -91,12 +91,13 @@ def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None, outpu
 
 
 class AIPS_cellpose:
-    def __init__(self, Image_name=None, path=None, image = None, mask = None, table = None, model_type = None, channels = None ):
+    def __init__(self, Image_name=None, path=None, image = None, mask = None, table = None, model_type = None, channels = None, clean = None ):
         '''
         :param Image_name: str
         :param path: str
         :param image: inputimage for segmantion
         :param model_type: 'cyto' or model_type='nuclei'
+        :param clean: int, remove object bellow the selected area size
         :param channels: # channels = [0,0] # IF YOU HAVE GRAYSCALE
                     channels = [2,3] # IF YOU HAVE G=cytoplasm and B=nucleus
                     channels = [2,1] # IF YOU HAVE G=cytoplasm and R=nucleus
@@ -104,6 +105,7 @@ class AIPS_cellpose:
                     or if you have different types of channels in each image
                     channels = [[2,3], [0,0], [0,0]]
                     channels = [1,1]
+
         '''
         self.Image_name = Image_name
         self.path = path
@@ -112,6 +114,8 @@ class AIPS_cellpose:
         self.table = table
         self.model_type = model_type
         self.channels = channels
+        self.clean = clean
+
 
     def cellpose_image_load(self):
         ''':parameter
@@ -132,6 +136,12 @@ class AIPS_cellpose:
                 self.mask,
                 intensity_image=image_input,
                 properties=['area', 'label', 'centroid'])).set_index('label')
+        if self.clean:
+            if isinstance(self.clean, int)==False:
+                mesg = "area size is not of type integer"
+                raise ValueError(mesg)
+            objectidx = self.table.loc[self.table['area'] < self.clean, :].index.tolist()
+            self.mask, self.table = self.removeObjects(objectList=objectidx)
         return self.mask, self.table
 
     def stackObjects_cellpose_ebimage_parametrs_method(self, image_input ,extract_pixel, resize_pixel, img_label):
@@ -249,9 +259,9 @@ class AIPS_cellpose:
         :return: binary image of the called masks, table_sel
         '''
         table_na_rmv_trgt = table_sel_cor.loc[table_sel_cor['predict'] > threshold, :]
-        for z in range(len(table_na_rmv_trgt)-1):
-            x, y = table_na_rmv_trgt.loc[table_na_rmv_trgt.index[z],["centroid-0", "centroid-1"]]
-            row, col = disk((int(x), int(y)), 20)
+        for label in table_na_rmv_trgt.index.values:
+            x, y = table_na_rmv_trgt.loc[label,["centroid-0", "centroid-1"]].tolist()
+            row, col = disk((int(x), int(y)), 10)
             img_blank[row, col] = 1
         return img_blank, table_na_rmv_trgt
 
@@ -277,6 +287,17 @@ class AIPS_cellpose:
                 self.mask[self.mask==object] = 0
             self.table.drop(objectList, inplace=True)
             return self.mask, self.table
+
+    def keepObject(self, table):
+        '''
+        :param table: keep all the object which are predicted above the threshold
+        :return: ROI image mask of selected objects
+        '''
+        nmask = np.zeros_like(self.mask)
+        for label in table.index.values:
+            nmask[self.mask == label] = label
+        return nmask
+
 
 
 

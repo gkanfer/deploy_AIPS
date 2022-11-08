@@ -19,6 +19,12 @@ git commit -m "Deploy function complete"
 git push origin
 
 
-##### Microscop window###
+##### Microscope window###
 clone
+git add -A
+git commit -m "Microscpe window"
+git push origin HEAD:main --force
 
+git add -A
+git commit -m "Improve Baysian deploy"
+git push origin HEAD:main --force
