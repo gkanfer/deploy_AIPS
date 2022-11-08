@@ -72,7 +72,7 @@ def granularityMesure_cellpose(file,path,classLabel,outPath, clean = None, outpu
     def generate_plots():
         def hist():
             fig, ax = plt.subplots()
-            sns.histplot(data=table, x='area', kde=True, color=sns.color_palette("Set2")[1], binwidth=500).set(title = 'Cell area distribution')
+            sns.histplot(data=table, x='area', kde=True, color=sns.color_palette("Set2")[1], binwidth=50).set(title = 'Cell area distribution')
             return ax
         def line():
             fig, ax = plt.subplots()

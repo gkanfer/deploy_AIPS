@@ -58,8 +58,7 @@ class GRANULARITY():
 
         table_prop = measure.regionprops_table(
             label_image=input_mask, intensity_image=input_image, properties=prop_names,
-            extra_properties=(sd_intensity, pixelcount, mean_int)
-        )
+            extra_properties=(sd_intensity, pixelcount, mean_int))
         return table_prop
 
     def featuresTable(self,features =["label"]):

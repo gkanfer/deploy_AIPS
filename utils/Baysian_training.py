@@ -136,3 +136,13 @@ def bayesModelTraining(files,kernelSize,pathOut, reportFile):
         pdf.savefig()
         plt.close()
 
+        plt.figure(figsize=(3, 3))
+        plt.title('Variables')
+        plt.text(0.07, 0.5, "a :{}".format(np.round(trace['a'].mean(), 2)), fontsize=10,transform=plt.gcf().transFigure)
+        plt.text(0.06, 0.4, "b :{}".format(np.round(trace['b'].mean(), 2)), fontsize=10,transform=plt.gcf().transFigure)
+        pdf.savefig()
+        plt.close()
+
+
+
+

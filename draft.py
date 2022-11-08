@@ -6,12 +6,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tifffile as tfi
 import random
-os.chdir(r'F:\HAB_2\PrinzScreen\Deploy')
+
 from utils import AIPS_cellpose as AC
 from utils import AIPS_granularity as ag
+from utils import AIPS_file_display as afd
 
-file = 'Cropexp001_13DKO_1-1.tif'
-path_input = r'F:\HAB_2\PrinzScreen\Deploy\unitest\mix'
+file = '_input.tif'
+path_input = r'D:\Gil\AIPS\deployPeroxisiome\deployActiveFolder'
 
 path_out = path_input
 
@@ -19,14 +20,17 @@ path_out = path_input
 AIPS_pose_object = AC.AIPS_cellpose(Image_name = file, path= path_input, model_type="cyto", channels=[0,0])
 img = AIPS_pose_object.cellpose_image_load()
 
+
 # create mask for the entire image
 mask, table = AIPS_pose_object.cellpose_segmantation(image_input=img)
 tfi.imread(os.path.join(path_input,file))
 
+
+
 gran = ag.GRANULARITY(image =img,mask = mask)
 granData = gran.loopLabelimage(start_kernel = 1, end_karnel = 5, kernel_size=5,deploy=True)
 granDataFinal = ag.MERGE().calcDecay(granData,5)
-
+#
 trace_a = -24.440681675906607
 trace_b = 31.215097768574996
 
@@ -44,19 +48,24 @@ table["predict"] = prob
 
 image_blank = np.zeros_like(img)
 binary, table_sel = AIPS_pose_object.call_bin(table_sel_cor = table, threshold = 0.5 ,img_blank = image_blank)
+mergeImage = afd.Compsite_display(input_image = img, mask_roi = binary,channel = 1).draw_ROI_contour()
+mergeImageEnhance = afd.Compsite_display(input_image = img, mask_roi = binary,channel = 1).enhanceImage(rgb_input_img = mergeImage,intensity = 2)
+plt.imshow(mergeImageEnhance)
 
-from skimage.draw import disk
+
 #
-table_na_rmv_trgt = table.loc[table['predict'] > 0.5, :]
-# for z in range(len(table_na_rmv_trgt)):
-#     print(z)
-#
-#
-image_blank = np.zeros_like(img)
-for z in range(len(table_na_rmv_trgt)-1):
-    x, y = table_na_rmv_trgt.loc[table_na_rmv_trgt.index[z],["centroid-0", "centroid-1"]]
-    row, col = disk((int(x), int(y)), 20)
-    image_blank[row, col] = 1
+# from skimage.draw import disk
+# #
+# table_na_rmv_trgt = table.loc[table['predict'] > 0.5, :]
+# # for z in range(len(table_na_rmv_trgt)):
+# #     print(z)
+# #
+# #
+# image_blank = np.zeros_like(img)
+# for z in range(len(table_na_rmv_trgt)-1):
+#     x, y = table_na_rmv_trgt.loc[table_na_rmv_trgt.index[z],["centroid-0", "centroid-1"]]
+#     row, col = disk((int(x), int(y)), 20)
+#     image_blank[row, col] = 1
 
 
 
@@ -79,7 +88,6 @@ for z in range(len(table_na_rmv_trgt)-1):
 # new_value = int(prev_number[0]) + len(table_na_rmv)
 # with open(os.path.join(path_out, 'cell_count.txt'), 'w') as f:
 #     f.write(str(new_value))
-
 
 
 
