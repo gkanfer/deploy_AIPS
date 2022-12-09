@@ -28,3 +28,7 @@ git push origin HEAD:main --force
 git add -A
 git commit -m "Improve Baysian deploy"
 git push origin HEAD:main --force
+
+git add -A
+git commit -m "Improve Baysian deploy 111822"
+git push origin HEAD:main --force

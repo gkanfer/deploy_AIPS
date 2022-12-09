@@ -1,4 +1,5 @@
 import time, os, sys
+tic = time.perf_counter()
 # from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array, array_to_img
 # from tensorflow.keras.models import load_model
 # import matplotlib.pyplot as plt
@@ -10,6 +11,8 @@ import random
 from utils import AIPS_cellpose as AC
 from utils import AIPS_granularity as ag
 from utils import AIPS_file_display as afd
+
+
 
 file = '_input.tif'
 path_input = r'D:\Gil\AIPS\deployPeroxisiome\deployActiveFolder'
@@ -30,6 +33,9 @@ tfi.imread(os.path.join(path_input,file))
 gran = ag.GRANULARITY(image =img,mask = mask)
 granData = gran.loopLabelimage(start_kernel = 1, end_karnel = 5, kernel_size=5,deploy=True)
 granDataFinal = ag.MERGE().calcDecay(granData,5)
+toc = time.perf_counter()
+print(f"Downloaded the tutorial in {toc - tic:0.4f} seconds")
+
 #
 trace_a = -24.440681675906607
 trace_b = 31.215097768574996
